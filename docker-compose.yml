@@ -1,0 +1,21 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/django-postgres-kube
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    ports:
+      - 5432:5432
+
+volumes:
+  db_data:
